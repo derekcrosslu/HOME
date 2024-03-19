@@ -4,9 +4,21 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 
+const env = {
+  account: process.env.CDK_DEFAULT_ACCOUNT,
+  region:  process.env.CDK_DEFAULT_REGION,
+};
+
 export class HomeStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, {
+      // assign the environment to the stack
+            env: {
+                account: env.account, // Specify your AWS account ID
+                region: env.region       // Specify your AWS region
+            },
+            ...props
+        });
 
     // Create a DynamoDB table
     const table = new dynamodb.Table(this, 'MyTable', {
